@@ -1,5 +1,3 @@
-// ===== КОНФИГУРАЦИЯ И КОНСТАНТЫ =====
-
 const PERIODS = {
     WWI: { start: 1914, end: 1918, name: 'Первая мировая война' },
     INTERWAR: { start: 1919, end: 1938, name: 'Межвоенный период' },
@@ -13,9 +11,7 @@ let gameState = {
     economy: 50,
     army: 50,
     stability: 50,
-    diplomacy: 50,
-    isGameOver: false,
-    isGameStarted: false
+    diplomacy: 50
 };
 
 const events = {
@@ -23,18 +19,126 @@ const events = {
         {
             title: '⚔️ Объявление войны',
             description: 'Соседняя держава объявила войну. Ваша страна в опасности. Как вы поступите?',
-            context: 'Начало Первой мировой войны (1914). Необходимо принять решение о вступлении в конфликт.',
+            context: 'Начало Первой мировой войны (1914).',
             choices: [
-                {
-                    text: '🎖️ Вступить в войну на стороне сильного союзника',
-                    effects: { economy: -15, army: 20, stability: -10, diplomacy: 10 }
-                },
-                {
-                    text: '🛡️ Остаться нейтральным и развивать оборону',
-                    effects: { economy: -5, army: 10, stability: 10, diplomacy: -5 }
-                },
-                {
-                    text: '💰 Продавать оружие обеим сторонам конфликта',
+                { text: '🎖️ Вступить в войну на стороне союзника', effects: { economy: -15, army: 20, stability: -10, diplomacy: 10 } },
+                { text: '🛡️ Остаться нейтральным', effects: { economy: -5, army: 10, stability: 10, diplomacy: -5 } },
+                { text: '💰 Продавать оружие обеим сторонам', effects: { economy: 20, army: 0, stability: -5, diplomacy: -15 } }
+            ]
+        },
+        {
+            title: '📉 Экономический кризис',
+            description: 'Война истощает экономику. Голод грозит городам.',
+            context: 'Военное время требует мер.',
+            choices: [
+                { text: '👷 Привлечь женщин на фабрики', effects: { economy: 15, stability: -10, army: -5 } },
+                { text: '📋 Государственное управление экономикой', effects: { economy: 10, stability: -15, diplomacy: -10 } },
+                { text: '🤝 Договориться о торговле', effects: { economy: 5, stability: 10, diplomacy: 15 } }
+            ]
+        },
+        {
+            title: '🔥 Революционные волнения',
+            description: 'На улицах города протесты и забастовки.',
+            context: 'Волнения угрожают стабильности.',
+            choices: [
+                { text: '🚨 Жёсткие меры подавления', effects: { stability: 15, diplomacy: -20, economy: -10 } },
+                { text: '🏥 Открыть центры помощи', effects: { stability: 5, diplomacy: 10, economy: -5 } },
+                { text: '📢 Пропаганда единства', effects: { stability: 10, diplomacy: -10, economy: 0 } }
+            ]
+        }
+    ],
+    INTERWAR: [
+        {
+            title: '✍️ Версальский договор',
+            description: 'После войны нужно решить об участии в международном соглашении.',
+            context: 'Мир перестраивается.',
+            choices: [
+                { text: '✍️ Подписать договор', effects: { diplomacy: 15, economy: -20, stability: -10 } },
+                { text: '💪 Отказаться и усилить вооружение', effects: { army: 15, diplomacy: -20, economy: -15 } },
+                { text: '🤝 Достичь компромисса', effects: { diplomacy: 10, economy: -5, stability: 5 } }
+            ]
+        },
+        {
+            title: '💥 Великая депрессия (1929)',
+            description: 'Мировая экономика на грани краха! Банки падают.',
+            context: 'Самый суровый кризис в истории.',
+            choices: [
+                { text: '💰 Затраты на общественные работы', effects: { economy: 15, stability: 10, diplomacy: -5 } },
+                { text: '🏭 Государственная экономика', effects: { economy: 10, stability: -10, diplomacy: -15 } },
+                { text: '🤑 Рынок сам всё решит', effects: { economy: -10, stability: -15, diplomacy: 5 } }
+            ]
+        },
+        {
+            title: '🌟 Политические движения',
+            description: 'Радикальные движения набирают популярность. Люди ищут сильного лидера.',
+            context: 'Демократия в кризисе.',
+            choices: [
+                { text: '🎩 Укрепить демократию', effects: { stability: 5, diplomacy: 15, army: -5 } },
+                { text: '👑 Авторитарное правление', effects: { stability: 15, diplomacy: -15, economy: -10 } },
+                { text: '⚖️ Военное правление', effects: { stability: 10, army: 15, diplomacy: -20 } }
+            ]
+        }
+    ],
+    WWII: [
+        {
+            title: '⚔️ Вторая мировая война',
+            description: 'Две державы сражаются за мировое господство. Вы должны выбрать сторону.',
+            context: 'Это решение определит судьбу страны.',
+            choices: [
+                { text: '⚔️ Первая коалиция', effects: { army: 25, economy: -20, stability: -15 } },
+                { text: '⚔️ Вторая коалиция', effects: { army: 25, economy: -20, stability: -15 } },
+                { text: '🏴 Остаться нейтральным', effects: { army: -10, economy: 10, stability: 10, diplomacy: -20 } }
+            ]
+        },
+        {
+            title: '🛡️ Оккупация',
+            description: 'Мощный сосед требует подчинения. Готов вторгнуться.',
+            context: 'Критический момент.',
+            choices: [
+                { text: '🛡️ Приготовиться к войне', effects: { army: 20, economy: -25, stability: -10 } },
+                { text: '🏳️ Капитулировать', effects: { stability: -20, diplomacy: -20, economy: -5 } },
+                { text: '🕵️ Подпольное сопротивление', effects: { stability: 5, diplomacy: 15, army: -10 } }
+            ]
+        },
+        {
+            title: '⚖️ Моральный выбор',
+            description: 'Требуют участия в сомнительных операциях. Генералы восстают.',
+            context: 'История будет помнить выбор.',
+            choices: [
+                { text: '❌ Отказаться', effects: { stability: -15, diplomacy: 15, army: -15 } },
+                { text: '✅ Выполнить приказы', effects: { stability: 10, army: 5, diplomacy: -30 } },
+                { text: '⚖️ Обнародовать преступления', effects: { stability: -20, diplomacy: 25, army: -10 } }
+            ]
+        }
+    ],
+    COLDWAR: [
+        {
+            title: '❄️ Холодная война',
+            description: 'Мир разделяется на два враждующих блока. Каждому нужны союзники.',
+            context: 'Выбор блока на 45 лет.',
+            choices: [
+                { text: '🌐 Западный блок', effects: { diplomacy: 20, economy: 10, stability: -5 } },
+                { text: '🔴 Восточный блок', effects: { stability: 10, army: 10, economy: -10 } },
+                { text: '🤝 Неприсоединившийся', effects: { diplomacy: 15, economy: 5, stability: -15 } }
+            ]
+        },
+        {
+            title: '🚀 Гонка вооружений',
+            description: 'Соперник увеличивает военный бюджет в 10 раз. Как балансировать?',
+            context: 'Ружья или масло?',
+            choices: [
+                { text: '🎖️ Максимальные военные расходы', effects: { army: 20, economy: -20, stability: -10 } },
+                { text: '💰 Экономика и качество жизни', effects: { economy: 15, stability: 10, army: -10 } },
+                { text: '⚖️ Сбалансированный подход', effects: { army: 5, economy: 5, stability: 5 } }
+            ]
+        },
+        {
+            title: '🔬 Техническая революция',
+            description: 'Компьютеры, интернет, биотехнологии. Кто будет лидером?',
+            context: 'Инвестиции откроют будущее.',
+            choices: [
+                { text: '](#)
+                    text: '💰 Продавать оружие обеим сторонам конфликта',
                     effects: { economy: 20, army: 0, stability: -5, diplomacy: -15 }
                 }
             ]
