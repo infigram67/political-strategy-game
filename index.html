@@ -21,7 +21,7 @@
                 <h2>Добро пожаловать, правитель!</h2>
                 <p>Ваша задача - провести страну через век истории, начиная с 1914 года.</p>
                 <p>Управляйте экономикой, армией, стабильностью и дипломатией.</p>
-                <button id="startBtn" class="btn-start">Начать игру</button>
+                <button id="startBtn" class="btn-start" onclick="startNewGame()">Начать игру</button>
             </div>
         </div>
 
@@ -87,7 +87,7 @@
                 <h2 id="gameOverTitle">Игра окончена</h2>
                 <p id="gameOverMessage">Ваша страна пала</p>
                 <div id="finalStats" class="final-stats"></div>
-                <button id="restartBtn" class="btn-start">Начать заново</button>
+                <button id="restartBtn" class="btn-start" onclick="restartGame()">Начать заново</button>
             </div>
         </div>
     </div>
