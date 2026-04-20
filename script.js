@@ -8,7 +8,6 @@ const PERIODS = {
     MODERN: { start: 1992, end: 2014, name: 'Современность' }
 };
 
-// ===== СОСТОЯНИЕ ИГРЫ =====
 let gameState = {
     year: 1914,
     economy: 50,
@@ -19,7 +18,6 @@ let gameState = {
     isGameStarted: false
 };
 
-// ===== СОБЫТИЯ ПО ПЕРИОДАМ =====
 const events = {
     WWI: [
         {
@@ -29,15 +27,15 @@ const events = {
             choices: [
                 {
                     text: '🎖️ Вступить в войну на стороне сильного союзника',
-                    effects: { economy: -15, army: +20, stability: -10, diplomacy: +10 }
+                    effects: { economy: -15, army: 20, stability: -10, diplomacy: 10 }
                 },
                 {
                     text: '🛡️ Остаться нейтральным и развивать оборону',
-                    effects: { economy: -5, army: +10, stability: +10, diplomacy: -5 }
+                    effects: { economy: -5, army: 10, stability: 10, diplomacy: -5 }
                 },
                 {
                     text: '💰 Продавать оружие обеим сторонам конфликта',
-                    effects: { economy: +20, army: 0, stability: -5, diplomacy: -15 }
+                    effects: { economy: 20, army: 0, stability: -5, diplomacy: -15 }
                 }
             ]
         },
@@ -48,15 +46,15 @@ const events = {
             choices: [
                 {
                     text: '👷 Привлечь женщин и подростков на фабрики',
-                    effects: { economy: +15, stability: -10, army: -5 }
+                    effects: { economy: 15, stability: -10, army: -5 }
                 },
                 {
                     text: '📋 Полное государственное управление экономикой',
-                    effects: { economy: +10, stability: -15, diplomacy: -10 }
+                    effects: { economy: 10, stability: -15, diplomacy: -10 }
                 },
                 {
                     text: '🤝 Договориться о торговле с нейтральными странами',
-                    effects: { economy: +5, stability: +10, diplomacy: +15 }
+                    effects: { economy: 5, stability: 10, diplomacy: 15 }
                 }
             ]
         },
@@ -67,15 +65,15 @@ const events = {
             choices: [
                 {
                     text: '🚨 Жёсткие меры подавления беспорядков',
-                    effects: { stability: +15, diplomacy: -20, economy: -10 }
+                    effects: { stability: 15, diplomacy: -20, economy: -10 }
                 },
                 {
                     text: '🏥 Открыть центры помощи беженцам и интеграции',
-                    effects: { stability: +5, diplomacy: +10, economy: -5 }
+                    effects: { stability: 5, diplomacy: 10, economy: -5 }
                 },
                 {
                     text: '📢 Пропаганда единства вокруг войны',
-                    effects: { stability: +10, diplomacy: -10, economy: 0 }
+                    effects: { stability: 10, diplomacy: -10, economy: 0 }
                 }
             ]
         }
@@ -88,15 +86,15 @@ const events = {
             choices: [
                 {
                     text: '✍️ Подписать договор со всеми условиями',
-                    effects: { diplomacy: +15, economy: -20, stability: -10 }
+                    effects: { diplomacy: 15, economy: -20, stability: -10 }
                 },
                 {
                     text: '💪 Отказаться и усилить вооружение',
-                    effects: { army: +15, diplomacy: -20, economy: -15 }
+                    effects: { army: 15, diplomacy: -20, economy: -15 }
                 },
                 {
                     text: '🤝 Переговорить и достичь компромисса',
-                    effects: { diplomacy: +10, economy: -5, stability: +5 }
+                    effects: { diplomacy: 10, economy: -5, stability: 5 }
                 }
             ]
         },
@@ -107,15 +105,15 @@ const events = {
             choices: [
                 {
                     text: '💰 Кейнсианская экономика - затраты на общественные работы',
-                    effects: { economy: +15, stability: +10, diplomacy: -5 }
+                    effects: { economy: 15, stability: 10, diplomacy: -5 }
                 },
                 {
                     text: '🏭 Государственное управление и плановая экономика',
-                    effects: { economy: +10, stability: -10, diplomacy: -15 }
+                    effects: { economy: 10, stability: -10, diplomacy: -15 }
                 },
                 {
                     text: '🤑 Невмешательство - доверить рынку',
-                    effects: { economy: -10, stability: -15, diplomacy: +5 }
+                    effects: { economy: -10, stability: -15, diplomacy: 5 }
                 }
             ]
         },
@@ -126,15 +124,15 @@ const events = {
             choices: [
                 {
                     text: '🎩 Укрепить демократию и парламент',
-                    effects: { stability: +5, diplomacy: +15, army: -5 }
+                    effects: { stability: 5, diplomacy: 15, army: -5 }
                 },
                 {
                     text: '👑 Установить авторитарное правление',
-                    effects: { stability: +15, diplomacy: -15, economy: -10 }
+                    effects: { stability: 15, diplomacy: -15, economy: -10 }
                 },
                 {
                     text: '⚖️ Установить военное правление',
-                    effects: { stability: +10, army: +15, diplomacy: -20 }
+                    effects: { stability: 10, army: 15, diplomacy: -20 }
                 }
             ]
         }
@@ -142,20 +140,20 @@ const events = {
     WWII: [
         {
             title: '⚔️ Вторая мировая война',
-            description: 'Две великие держав�� сражаются за мировое господство. Война охватила весь континент. Вы должны выбрать сторону.',
+            description: 'Две великие державы сражаются за мировое господство. Война охватила весь континент. Вы должны выбрать сторону.',
             context: 'Это решение определит судьбу вашей страны на ближайшие десятилетия.',
             choices: [
                 {
                     text: '⚔️ Присоединиться к первой коалиции',
-                    effects: { army: +25, economy: -20, stability: -15 }
+                    effects: { army: 25, economy: -20, stability: -15 }
                 },
                 {
                     text: '⚔️ Присоединиться ко второй коалиции',
-                    effects: { army: +25, economy: -20, stability: -15 }
+                    effects: { army: 25, economy: -20, stability: -15 }
                 },
                 {
                     text: '🏴 Остаться нейтральным и выжить',
-                    effects: { army: -10, economy: +10, stability: +10, diplomacy: -20 }
+                    effects: { army: -10, economy: 10, stability: 10, diplomacy: -20 }
                 }
             ]
         },
@@ -166,7 +164,7 @@ const events = {
             choices: [
                 {
                     text: '🛡️ Приготовиться к войне, собрать весь боевой потенциал',
-                    effects: { army: +20, economy: -25, stability: -10 }
+                    effects: { army: 20, economy: -25, stability: -10 }
                 },
                 {
                     text: '🏳️ Капитулировать и сохранить жизни',
@@ -174,7 +172,7 @@ const events = {
                 },
                 {
                     text: '🕵️ Организовать подпольное сопротивление',
-                    effects: { stability: +5, diplomacy: +15, army: -10 }
+                    effects: { stability: 5, diplomacy: 15, army: -10 }
                 }
             ]
         },
@@ -185,15 +183,15 @@ const events = {
             choices: [
                 {
                     text: '❌ Отказаться и скрыться в подполье',
-                    effects: { stability: -15, diplomacy: +15, army: -15 }
+                    effects: { stability: -15, diplomacy: 15, army: -15 }
                 },
                 {
                     text: '✅ Выполнить приказы без возражений',
-                    effects: { stability: +10, army: +5, diplomacy: -30 }
+                    effects: { stability: 10, army: 5, diplomacy: -30 }
                 },
                 {
                     text: '⚖️ Обнародовать преступления союзникам',
-                    effects: { stability: -20, diplomacy: +25, army: -10 }
+                    effects: { stability: -20, diplomacy: 25, army: -10 }
                 }
             ]
         }
@@ -201,20 +199,20 @@ const events = {
     COLDWAR: [
         {
             title: '❄️ Холодная война',
-            description: 'Война закончилась, но мир разделяется на два враждующих блока. Каждому нужны верные союзники. Выбор определит будущее.',
+            description: 'Война закончилась, но м��р разделяется на два враждующих блока. Каждому нужны верные союзники. Выбор определит будущее.',
             context: 'Выбор блока будет ключевым для вашей страны на 45 лет.',
             choices: [
                 {
                     text: '🌐 Присоединиться к западному блоку',
-                    effects: { diplomacy: +20, economy: +10, stability: -5 }
+                    effects: { diplomacy: 20, economy: 10, stability: -5 }
                 },
                 {
                     text: '🔴 Присоединиться к восточному блоку',
-                    effects: { stability: +10, army: +10, economy: -10 }
+                    effects: { stability: 10, army: 10, economy: -10 }
                 },
                 {
                     text: '🤝 Остаться неприсоединившимся',
-                    effects: { diplomacy: +15, economy: +5, stability: -15 }
+                    effects: { diplomacy: 15, economy: 5, stability: -15 }
                 }
             ]
         },
@@ -225,15 +223,15 @@ const events = {
             choices: [
                 {
                     text: '🎖️ Максимальные военные расходы и ядерное оружие',
-                    effects: { army: +20, economy: -20, stability: -10 }
+                    effects: { army: 20, economy: -20, stability: -10 }
                 },
                 {
                     text: '💰 Вложить в экономику и качество жизни народа',
-                    effects: { economy: +15, stability: +10, army: -10 }
+                    effects: { economy: 15, stability: 10, army: -10 }
                 },
                 {
                     text: '⚖️ Сбалансированный подход',
-                    effects: { army: +5, economy: +5, stability: +5 }
+                    effects: { army: 5, economy: 5, stability: 5 }
                 }
             ]
         },
@@ -244,15 +242,15 @@ const events = {
             choices: [
                 {
                     text: '🔬 Массивные инвестиции в науку и исследования',
-                    effects: { economy: +20, stability: +15, army: -5 }
+                    effects: { economy: 20, stability: 15, army: -5 }
                 },
                 {
                     text: '🎓 Реформа образования и развитие человеческих ресурсов',
-                    effects: { economy: +15, stability: +10, diplomacy: +10 }
+                    effects: { economy: 15, stability: 10, diplomacy: 10 }
                 },
                 {
                     text: '🤖 Компьютеризация и автоматизация производства',
-                    effects: { economy: +25, stability: -10, army: +5 }
+                    effects: { economy: 25, stability: -10, army: 5 }
                 }
             ]
         }
@@ -265,15 +263,15 @@ const events = {
             choices: [
                 {
                     text: '🌍 Активно участвовать в глобализации',
-                    effects: { economy: +20, diplomacy: +15, stability: -10 }
+                    effects: { economy: 20, diplomacy: 15, stability: -10 }
                 },
                 {
                     text: '🛡️ Защитить национальные интересы и традиции',
-                    effects: { stability: +15, economy: -10, diplomacy: -15 }
+                    effects: { stability: 15, economy: -10, diplomacy: -15 }
                 },
                 {
                     text: '⚖️ Избирательное участие в глобализации',
-                    effects: { economy: +10, stability: +5, diplomacy: +5 }
+                    effects: { economy: 10, stability: 5, diplomacy: 5 }
                 }
             ]
         },
@@ -284,15 +282,15 @@ const events = {
             choices: [
                 {
                     text: '🎖️ Активное военное участие в коалициях',
-                    effects: { army: +15, stability: -15, diplomacy: -10 }
+                    effects: { army: 15, stability: -15, diplomacy: -10 }
                 },
                 {
                     text: '🛡️ Укрепить внутреннюю безопасность и оборону',
-                    effects: { stability: +15, army: +10, economy: -10 }
+                    effects: { stability: 15, army: 10, economy: -10 }
                 },
                 {
                     text: '🤝 Международное сотрудничество в разведке',
-                    effects: { diplomacy: +20, stability: +5, economy: +5 }
+                    effects: { diplomacy: 20, stability: 5, economy: 5 }
                 }
             ]
         },
@@ -303,22 +301,20 @@ const events = {
             choices: [
                 {
                     text: '💰 Спасить финансовый сектор мегайинвестициями',
-                    effects: { economy: +10, stability: -20, diplomacy: -10 }
+                    effects: { economy: 10, stability: -20, diplomacy: -10 }
                 },
                 {
                     text: '👥 Помощь населению и социальные программы',
-                    effects: { stability: +15, economy: -5, diplomacy: +10 }
+                    effects: { stability: 15, economy: -5, diplomacy: 10 }
                 },
                 {
                     text: '⚖️ Реформа финансовой системы',
-                    effects: { economy: +15, stability: +10, diplomacy: +5 }
+                    effects: { economy: 15, stability: 10, diplomacy: 5 }
                 }
             ]
         }
     ]
 };
-
-// ===== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ =====
 
 function getCurrentPeriod(year) {
     for (const [key, period] of Object.entries(PERIODS)) {
@@ -349,15 +345,15 @@ function generateFallbackEvent(state) {
         choices: [
             {
                 text: '📈 Инвестировать в экономику и инфраструктуру',
-                effects: { economy: +10, stability: +5 }
+                effects: { economy: 10, stability: 5 }
             },
             {
                 text: '🎖️ Укрепить армию и оборону',
-                effects: { army: +10, stability: -5 }
+                effects: { army: 10, stability: -5 }
             },
             {
                 text: '🤝 Развивать дипломатические отношения',
-                effects: { diplomacy: +10, stability: +5 }
+                effects: { diplomacy: 10, stability: 5 }
             }
         ]
     };
@@ -397,5 +393,113 @@ function updateUI() {
     document.getElementById('stabilityValue').textContent = gameState.stability;
     document.getElementById('diplomacyValue').textContent = gameState.diplomacy;
     
-    update](#)*
-
+    updateStatBar('economyBar', gameState.economy);
+    updateStatBar('armyBar', gameState.army);
+    updateStatBar('stabilityBar', gameState.stability);
+    updateStatBar('diplomacyBar', gameState.diplomacy);
+}
+
+function updateStatBar(barId, value) {
+    const bar = document.getElementById(barId);
+    bar.style.width = value + '%';
+    
+    bar.classList.remove('warning', 'danger');
+    if (value <= 15) {
+        bar.classList.add('danger');
+    } else if (value <= 35) {
+        bar.classList.add('warning');
+    }
+}
+
+function displayEvent(event) {
+    document.getElementById('eventTitle').textContent = event.title;
+    document.getElementById('eventText').textContent = event.description;
+    document.getElementById('eventContext').textContent = event.context;
+    
+    for (let i = 0; i < 3; i++) {
+        const button = document.getElementById('choice' + (i + 1));
+        const choice = event.choices[i];
+        button.textContent = choice.text;
+        button.onclick = function() { makeChoice(i, event); };
+        button.disabled = false;
+    }
+}
+
+function makeChoice(choiceIndex, event) {
+    const choice = event.choices[choiceIndex];
+    
+    document.querySelectorAll('.choice-btn').forEach(function(btn) {
+        btn.disabled = true;
+    });
+    
+    applyEffects(gameState, choice.effects);
+    
+    setTimeout(function() {
+        updateUI();
+        
+        if (checkGameOver(gameState)) {
+            endGame();
+        } else {
+            const nextEvent = getRandomEvent(gameState);
+            displayEvent(nextEvent);
+        }
+    }, 600);
+}
+
+function endGame() {
+    gameState.isGameOver = true;
+    
+    const reason = getGameOverReason(gameState);
+    
+    document.getElementById('gameScreen').style.display = 'none';
+    document.getElementById('gameOverScreen').classList.add('active');
+    
+    document.getElementById('gameOverMessage').textContent = reason;
+    
+    const finalStatsDiv = document.getElementById('finalStats');
+    finalStatsDiv.innerHTML = '<p><span>Последний год:</span> <span>' + gameState.year + '</span></p><p><span>Экономика:</span> <span>' + gameState.economy + '</span></p><p><span>Армия:</span> <span>' + gameState.army + '</span></p><p><span>Стабильность:</span> <span>' + gameState.stability + '</span></p><p><span>Дипломатия:</span> <span>' + gameState.diplomacy + '</span></p>';
+}
+
+function startNewGame() {
+    gameState = {
+        year: 1914,
+        economy: 50,
+        army: 50,
+        stability: 50,
+        diplomacy: 50,
+        isGameOver: false,
+        isGameStarted: true
+    };
+    
+    document.getElementById('mainMenu').classList.remove('active');
+    document.getElementById('gameScreen').style.display = 'flex';
+    document.getElementById('gameOverScreen').classList.remove('active');
+    
+    updateUI();
+    
+    const firstEvent = getRandomEvent(gameState);
+    displayEvent(firstEvent);
+}
+
+function restartGame() {
+    document.getElementById('mainMenu').classList.add('active');
+    document.getElementById('gameScreen').style.display = 'none';
+    document.getElementById('gameOverScreen').classList.remove('active');
+    
+    gameState = {
+        year: 1914,
+        economy: 50,
+        army: 50,
+        stability: 50,
+        diplomacy: 50,
+        isGameOver: false,
+        isGameStarted: false
+    };
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('startBtn').addEventListener('click', startNewGame);
+    document.getElementById('restartBtn').addEventListener('click', restartGame);
+    
+    console.log('Игра загружена');
+});
